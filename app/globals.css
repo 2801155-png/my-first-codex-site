@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --milk: #f7f1ea;
+  --graphite: #252326;
+  --fuchsia: #d91e8f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--milk);
+  color: var(--graphite);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+::selection {
+  background: rgba(217, 30, 143, 0.22);
+}
+
+.noise {
+  background-image: radial-gradient(rgba(37, 35, 38, 0.08) 0.7px, transparent 0.7px);
+  background-size: 12px 12px;
+}
+
+.fuchsia-text {
+  background: linear-gradient(135deg, #d91e8f, #c2187a 45%, #252326);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Практикум по нейросетям для малого бизнеса</title>
+    <meta name="description" content="Двухдневный практикум Натальи Руцкой по внедрению нейросетей в задачи малого бизнеса." />
+    <style>
+:root {
+  --milk: #f7f1ea;
+  --graphite: #252326;
+  --soft-graphite: #3a363d;
+  --fuchsia: #d91e8f;
+  --dark-fuchsia: #c2187a;
+  --blush: #f7d7ea;
+  --lavender: #e8e3ee;
+  --shadow: 0 24px 70px rgba(37, 35, 38, 0.12);
+  --glow: 0 0 60px rgba(217, 30, 143, 0.28);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--milk);
+  color: var(--graphite);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+a { color: inherit; text-decoration: none; }
+.container { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 100vh;
+  padding: 24px 0 92px;
+  background:
+    radial-gradient(circle at 18% 10%, rgba(217, 30, 143, 0.13), transparent 25%),
+    radial-gradient(circle at 82% 2%, rgba(232, 227, 238, 0.74), transparent 28%),
+    linear-gradient(135deg, #f7f1ea, #fffaf7 58%, #f7d7ea);
+}
+.noise {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  opacity: 0.18;
+  background-image: radial-gradient(rgba(37, 35, 38, 0.08) 0.7px, transparent 0.7px);
+  background-size: 12px 12px;
+}
+.orb { position: absolute; border-radius: 999px; filter: blur(10px); opacity: 0.55; z-index: -1; }
+.orb-one { width: 260px; height: 260px; right: 7%; top: 18%; background: rgba(217, 30, 143, 0.18); animation: drift 8s ease-in-out infinite; }
+.orb-two { width: 190px; height: 190px; left: 5%; bottom: 14%; background: rgba(194, 24, 122, 0.16); animation: drift 9s ease-in-out infinite reverse; }
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(217, 30, 143, 0.28);
+  box-shadow: 0 0 14px rgba(217, 30, 143, 0.25);
+  animation: particleFloat var(--duration) ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+.nav {
+  position: relative;
+  z-index: 3;
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 12px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.48);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+.brand { font-size: 14px; font-weight: 950; letter-spacing: 0.18em; text-transform: uppercase; }
+.brand span { color: var(--fuchsia); }
+.brand b { color: var(--graphite); }
+.nav-links { display: flex; gap: 24px; color: var(--soft-graphite); font-size: 14px; font-weight: 700; }
+.nav-links a { transition: color 0.2s ease; }
+.nav-links a:hover { color: var(--fuchsia); }
+.nav-button {
+  padding: 10px 20px;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--graphite);
+  font-size: 14px;
+  font-weight: 800;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.nav-button:hover { transform: translateY(-2px); background: var(--fuchsia); }
+
+.hero-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1.03fr 0.97fr;
+  gap: 56px;
+  align-items: center;
+  padding-top: 84px;
+}
+.eyebrow { margin: 0 0 14px; color: var(--fuchsia); font-size: 14px; font-weight: 950; letter-spacing: 0.25em; text-transform: uppercase; }
+.hero-copy h1 {
+  max-width: 860px;
+  margin: 0;
+  font-size: clamp(48px, 7.4vw, 94px);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+  font-weight: 950;
+}
+.hero-copy h1 span {
+  background: linear-gradient(135deg, var(--fuchsia), var(--dark-fuchsia) 45%, var(--graphite));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero-text { max-width: 690px; margin: 26px 0 0; color: var(--soft-graphite); font-size: 20px; line-height: 1.65; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 34px; }
+.primary-button, .secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-weight: 900;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+.primary-button { color: #fff; background: var(--fuchsia); box-shadow: var(--glow); }
+.primary-button b { display: inline-block; margin-left: 8px; transition: transform 0.2s ease; }
+.primary-button:hover b { transform: translateX(4px); }
+.secondary-button { border: 1px solid rgba(37, 35, 38, 0.14); background: rgba(255, 255, 255, 0.56); }
+.primary-button:hover, .secondary-button:hover { transform: translateY(-4px); }
+.hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 650px; margin-top: 28px; }
+.hero-stats div { padding: 16px; border: 1px solid rgba(37, 35, 38, 0.08); border-radius: 22px; background: rgba(255, 255, 255, 0.5); }
+.hero-stats strong { display: block; font-size: 22px; font-weight: 950; }
+.hero-stats small { color: var(--soft-graphite); font-weight: 700; }
+
+.trainer-card {
+  position: relative;
+  overflow: hidden;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  border-radius: 34px;
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  animation: cardFloat 7s ease-in-out infinite;
+}
+.photo-frame {
+  overflow: hidden;
+  border-radius: 26px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+.photo-frame img {
+  display: block;
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  object-position: center;
+}
+.trainer-caption { padding: 22px 10px 8px; }
+.trainer-caption p { margin: 0 0 10px; color: var(--fuchsia); font-size: 13px; font-weight: 950; letter-spacing: 0.22em; text-transform: uppercase; }
+.trainer-caption h2 { margin: 0 0 10px; color: var(--graphite); font-size: 42px; line-height: 1; }
+.trainer-caption span { display: block; color: rgba(58, 54, 61, 0.82); line-height: 1.65; }
+.trainer-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 8px 10px 10px; }
+.trainer-chips span { padding: 14px; border-radius: 18px; text-align: center; color: var(--dark-fuchsia); font-weight: 850; background: rgba(247, 215, 234, 0.72); }
+
+.section { padding: 86px 0; }
+.section-title { width: min(760px, calc(100% - 40px)); margin: 0 auto 42px; text-align: center; }
+.section-title h2 { margin: 0; font-size: clamp(34px, 4.5vw, 56px); line-height: 1; letter-spacing: -0.04em; }
+.section-title > p:last-child { margin: 18px 0 0; color: rgba(58, 54, 61, 0.82); font-size: 18px; line-height: 1.65; }
+.cards, .benefit-grid, .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.card, .testimonial {
+  padding: 30px;
+  border: 1px solid rgba(37, 35, 38, 0.1);
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: var(--shadow);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.card:hover, .testimonial:hover { transform: translateY(-10px); border-color: rgba(217, 30, 143, 0.35); }
+.tag { display: inline-flex; padding: 7px 12px; border-radius: 999px; color: var(--dark-fuchsia); background: var(--blush); font-size: 12px; font-weight: 950; letter-spacing: 0.14em; text-transform: uppercase; }
+.card h3 { margin: 24px 0 12px; font-size: 24px; line-height: 1.12; }
+.card p { color: rgba(58, 54, 61, 0.82); line-height: 1.7; }
+.progress { height: 8px; margin-top: 26px; border-radius: 999px; background: var(--lavender); }
+.progress i { display: block; width: 66%; height: 100%; border-radius: inherit; background: var(--fuchsia); transition: width 0.45s ease; }
+.card:hover .progress i { width: 100%; }
+
+.dark-section { color: #fff; background: var(--graphite); }
+.dark-section .section-title > p:last-child { color: rgba(255, 255, 255, 0.68); }
+.benefit { padding: 26px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 28px; background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); transition: background 0.25s ease, transform 0.25s ease; }
+.benefit:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-6px); }
+.benefit span { display: grid; place-items: center; width: 52px; height: 52px; margin-bottom: 20px; border-radius: 18px; background: var(--fuchsia); box-shadow: var(--glow); font-size: 24px; }
+.benefit h3 { margin: 0 0 10px; font-size: 21px; }
+.benefit p { margin: 0; color: rgba(255, 255, 255, 0.7); line-height: 1.65; }
+
+.timeline { max-width: 920px; }
+.step { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 16px; padding: 24px; border: 1px solid rgba(37, 35, 38, 0.1); border-radius: 28px; background: rgba(255, 255, 255, 0.72); box-shadow: var(--shadow); }
+.step:nth-child(even) { transform: translateX(32px); }
+.step b { flex: 0 0 50px; height: 50px; display: grid; place-items: center; border-radius: 999px; color: #fff; background: var(--graphite); font-size: 20px; }
+.step p { margin: 0; font-size: 18px; font-weight: 750; line-height: 1.55; }
+.testimonials-section { background: linear-gradient(180deg, var(--milk), #fff7fb); }
+.testimonial { margin: 0; background: rgba(247, 215, 234, 0.68); }
+.testimonial div { margin-bottom: 18px; color: var(--fuchsia); font-size: 26px; letter-spacing: 0.08em; }
+.testimonial blockquote { margin: 0; color: var(--soft-graphite); line-height: 1.7; }
+.testimonial figcaption { margin-top: 22px; font-weight: 950; }
+
+.faq-list { max-width: 880px; }
+.faq-item { margin-bottom: 12px; padding: 0; overflow: hidden; border: 1px solid rgba(37, 35, 38, 0.1); border-radius: 24px; background: rgba(255, 255, 255, 0.72); }
+.faq-item summary { cursor: pointer; padding: 22px 24px; font-size: 18px; font-weight: 950; list-style: none; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item p { margin: 0; padding: 0 24px 24px; color: rgba(58, 54, 61, 0.82); line-height: 1.65; }
+
+.lead-section { padding-top: 30px; }
+.lead-box { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 28px; padding: 38px; border-radius: 38px; color: #fff; background: var(--graphite); box-shadow: var(--shadow); }
+.lead-copy { display: flex; flex-direction: column; justify-content: space-between; min-height: 420px; padding: 30px; border-radius: 28px; background: var(--fuchsia); box-shadow: var(--glow); }
+.lead-copy .eyebrow { color: rgba(255, 255, 255, 0.76); }
+.lead-copy h2 { margin: 0; font-size: clamp(36px, 4vw, 52px); line-height: 1; letter-spacing: -0.04em; }
+.lead-copy p { color: rgba(255, 255, 255, 0.82); line-height: 1.7; }
+.lead-copy span { display: block; padding: 16px; border-radius: 18px; background: rgba(255, 255, 255, 0.14); font-weight: 800; }
+.form { display: grid; gap: 16px; padding: 28px; border-radius: 28px; color: var(--graphite); background: #fff; }
+.form label { font-size: 14px; font-weight: 850; }
+.form input, .form textarea { width: 100%; margin-top: 8px; padding: 15px 16px; border: 1px solid rgba(37, 35, 38, 0.1); border-radius: 18px; outline: none; color: var(--graphite); background: var(--milk); font: inherit; }
+.form textarea { resize: vertical; }
+.form input:focus, .form textarea:focus { border-color: var(--fuchsia); }
+.form button { min-height: 54px; border: 0; border-radius: 999px; color: #fff; background: var(--graphite); font: inherit; font-weight: 950; cursor: pointer; transition: transform 0.25s ease, background 0.25s ease; }
+.form button:hover { transform: translateY(-3px); background: var(--fuchsia); }
+.form-success { display: none; margin: 0; padding: 16px; border-radius: 18px; text-align: center; color: var(--dark-fuchsia); background: var(--blush); font-weight: 900; }
+.form-success.show { display: block; }
+
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.delay-one { transition-delay: 0.12s; }
+.delay-two { transition-delay: 0.24s; }
+
+@keyframes cardFloat { 50% { transform: translateY(-14px); } }
+@keyframes drift { 50% { transform: translate3d(24px, -18px, 0) scale(1.06); } }
+@keyframes pulseRing { 50% { transform: scale(1.04); opacity: 0.74; } }
+@keyframes particleFloat { 50% { transform: translate3d(18px, -36px, 0) scale(1.35); opacity: 0.95; } }
+
+@media (max-width: 940px) {
+  .nav-links { display: none; }
+  .hero-grid, .cards, .benefit-grid, .testimonial-grid, .lead-box { grid-template-columns: 1fr; }
+  .trainer-card { min-height: 480px; }
+  .hero-stats { grid-template-columns: 1fr; }
+  .step:nth-child(even) { transform: none; }
+  .lead-copy { min-height: auto; gap: 22px; }
+}
+
+@media (max-width: 560px) {
+  .container, .nav, .section-title { width: min(100% - 28px, 1180px); }
+  .hero { padding-top: 14px; }
+  .nav { padding: 10px 12px; }
+  .brand { font-size: 12px; letter-spacing: 0.12em; }
+  .nav-button { padding: 9px 14px; }
+  .hero-grid { padding-top: 54px; }
+  .hero-actions a { width: 100%; }
+  .trainer-card, .lead-box { padding: 18px; border-radius: 28px; }
+  .ai-badge { width: 200px; height: 200px; }
+  .section { padding: 64px 0; }
+}
+
+    </style>
+  </head>
+  <body>
+    <header class="hero" id="top">
+      <div class="noise"></div>
+      <div class="orb orb-one"></div>
+      <div class="orb orb-two"></div>
+      <div class="particle-field" aria-hidden="true"></div>
+
+      <nav class="nav reveal">
+        <a class="brand" href="#top"><span>Нейро</span><b>Практикум</b></a>
+        <div class="nav-links">
+          <a href="#program">Программа</a>
+          <a href="#benefits">Польза</a>
+          <a href="#process">Процесс</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <a class="nav-button" href="#lead">Заявка</a>
+      </nav>
+
+      <div class="hero-grid container">
+        <section class="hero-copy reveal">
+          <p class="eyebrow">Практикум по нейросетям для малого бизнеса</p>
+          <h1>За 2 дня соберите своего <span>ИИ-помощника</span> для бизнеса</h1>
+          <p class="hero-text">
+            Практикум для предпринимателей и специалистов: разберём, где ИИ действительно помогает, настроим рабочие инструменты и соберём понятную систему под ваши задачи.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-button" href="#lead">Оставить заявку <b>→</b></a>
+            <a class="secondary-button" href="#program">Смотреть программу</a>
+          </div>
+          <div class="hero-stats" aria-label="Ключевые факты практикума">
+            <div><strong>2 дня</strong><small>по 4 часа</small></div>
+            <div><strong>11:00–15:00</strong><small>живой практикум</small></div>
+            <div><strong>100%</strong><small>на ваших задачах</small></div>
+          </div>
+        </section>
+
+        <aside class="trainer-card photo-card reveal delay-one">
+          <div class="photo-frame">
+            <img src="natalya.jpg" alt="Наталья Руцкая" />
+          </div>
+          <div class="trainer-caption">
+            <p>Автор и тренер</p>
+            <h2>Наталья Руцкая</h2>
+            <span>Маркетолог, помогаю бизнесу внедрять ИИ в контент, рекламу и ежедневные задачи</span>
+          </div>
+          <div class="trainer-chips">
+            <span>Промпты</span>
+            <span>Шаблоны</span>
+            <span>Разбор</span>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <main>
+      <section class="section" id="program">
+        <div class="section-title reveal">
+          <p class="eyebrow">Что внутри</p>
+          <h2>Практические блоки курса</h2>
+          <p>Каждый блок сразу переводит знания в действие: вы работаете с реальными задачами своего бизнеса.</p>
+        </div>
+        <div class="cards container">
+          <article class="card reveal">
+            <span class="tag">День 1</span>
+            <h3>База ИИ без сложных слов</h3>
+            <p>Разберёте, где нейросети помогают малому бизнесу: контент, маркетинг, анализ, клиенты и рутина.</p>
+            <div class="progress"><i></i></div>
+          </article>
+          <article class="card reveal delay-one">
+            <span class="tag">Практика</span>
+            <h3>Промпты, которые дают результат</h3>
+            <p>Научитесь задавать роль, контекст, задачу и формат ответа, чтобы получать нормальные материалы.</p>
+            <div class="progress"><i></i></div>
+          </article>
+          <article class="card reveal delay-two">
+            <span class="tag">День 2</span>
+            <h3>ИИ-помощник под бизнес</h3>
+            <p>Настроите помощника с описанием бизнеса, аудиторией, услугами, текстами, примерами и прайсом.</p>
+            <div class="progress"><i></i></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section dark-section" id="benefits">
+        <div class="section-title reveal">
+          <p class="eyebrow">Преимущества</p>
+          <h2>После практикума ИИ станет рабочим инструментом</h2>
+          <p>Не просто посмотрите демо, а соберёте понятную систему под свои ежедневные процессы.</p>
+        </div>
+        <div class="benefit-grid container">
+          <article class="benefit reveal"><span>⚡</span><h3>Экономия времени</h3><p>Ускорите повторяющиеся задачи без найма новых специалистов.</p></article>
+          <article class="benefit reveal"><span>🧭</span><h3>Понятная карта</h3><p>Поймёте, какие задачи можно поручить ИИ, а какие лучше оставить человеку.</p></article>
+          <article class="benefit reveal"><span>🧩</span><h3>Реальные проекты</h3><p>Работа идёт не на абстрактных примерах, а на вашем бизнесе.</p></article>
+          <article class="benefit reveal"><span>📦</span><h3>Шаблоны</h3><p>Получите промпты, чек-листы, каталог сервисов и домашние задания.</p></article>
+          <article class="benefit reveal"><span>🤖</span><h3>Первый ИИ-помощник</h3><p>Соберёте помощника для маркетинга, SMM, аналитики или клиентов.</p></article>
+          <article class="benefit reveal"><span>🎯</span><h3>Готовый материал</h3><p>Унесёте оффер, контент-план, описание услуги или коммерческое предложение.</p></article>
+        </div>
+      </section>
+
+      <section class="section" id="process">
+        <div class="section-title reveal">
+          <p class="eyebrow">Процесс</p>
+          <h2>Как проходит работа</h2>
+          <p>Маршрут простой: от поиска задач до готового бизнес-материала и первого ИИ-помощника.</p>
+        </div>
+        <div class="timeline container">
+          <article class="step reveal"><b>1</b><p>Заполняем анкету и находим задачи, которые отнимают больше всего времени.</p></article>
+          <article class="step reveal"><b>2</b><p>Выбираем рабочие нейросети, настраиваем инструменты и создаём первые промпты.</p></article>
+          <article class="step reveal"><b>3</b><p>Улучшаем ответы, проверяем результат и собираем инструкции для ИИ-помощника.</p></article>
+          <article class="step reveal"><b>4</b><p>Создаём готовый материал: оффер, контент-план, скрипт, КП или описание услуги.</p></article>
+        </div>
+      </section>
+
+      <section class="section testimonials-section">
+        <div class="section-title reveal">
+          <p class="eyebrow">Отзывы</p>
+          <h2>Что говорят участники</h2>
+          <p>Примеры того, какой результат должен почувствовать ученик после практикума.</p>
+        </div>
+        <div class="testimonial-grid container">
+          <figure class="testimonial reveal"><div>★★★★★</div><blockquote>Я впервые поняла, как говорить с нейросетью. За практикум собрала контент-план и шаблон ответов клиентам.</blockquote><figcaption>Ольга, студия красоты</figcaption></figure>
+          <figure class="testimonial reveal delay-one"><div>★★★★★</div><blockquote>Очень практично: без лишней теории и сложных терминов. Теперь ИИ помогает готовить предложения и анализировать заявки.</blockquote><figcaption>Илья, локальный сервис</figcaption></figure>
+          <figure class="testimonial reveal delay-two"><div>★★★★★</div><blockquote>Понравилось, что мы работали с моим проектом. ИИ-помощник уже помогает писать тексты для рассылок.</blockquote><figcaption>Марина, онлайн-школа</figcaption></figure>
+        </div>
+      </section>
+
+      <section class="section" id="faq">
+        <div class="section-title reveal">
+          <p class="eyebrow">FAQ</p>
+          <h2>Частые вопросы</h2>
+          <p>Короткие ответы, чтобы снять сомнения перед заявкой.</p>
+        </div>
+        <div class="faq-list container">
+          <details class="faq-item reveal" open><summary>Подойдёт ли практикум, если я новичок?</summary><p>Да. Всё объясняется простыми словами, а практика начинается с базовых действий и настройки инструментов.</p></details>
+          <details class="faq-item reveal"><summary>Нужно ли заранее разбираться в нейросетях?</summary><p>Нет. Достаточно прийти со своей бизнес-задачей и ноутбуком. Остальное разберём пошагово.</p></details>
+          <details class="faq-item reveal"><summary>Что я получу после двух дней?</summary><p>Карту задач, рабочие промпты, настроенного ИИ-помощника, готовый бизнес-материал и доступ к материалам.</p></details>
+          <details class="faq-item reveal"><summary>Где будут материалы?</summary><p>Раздаточные материалы, промпты, шаблоны, каталог сервисов и домашние задания будут в общей супергруппе в мессенджере.</p></details>
+        </div>
+      </section>
+
+      <section class="section lead-section" id="lead">
+        <div class="lead-box container reveal">
+          <div class="lead-copy">
+            <p class="eyebrow">Заявка</p>
+            <h2>Хотите внедрить ИИ в бизнес без перегруза?</h2>
+            <p>Оставьте контакты — мы свяжемся, ответим на вопросы и подскажем, подходит ли практикум под ваши задачи.</p>
+            <span>Формат: 2 дня × 4 часа. Материалы и шаблоны — в общей супергруппе.</span>
+          </div>
+          <form class="form" id="leadForm">
+            <label>Имя<input required type="text" name="name" placeholder="Ваше имя" /></label>
+            <label>Email или телефон<input required type="text" name="contact" placeholder="Как с вами связаться" /></label>
+            <label>Сообщение<textarea required name="message" rows="5" placeholder="Расскажите, какая задача в бизнесе сейчас самая важная"></textarea></label>
+            <button type="submit">Отправить заявку</button>
+            <p class="form-success" id="formSuccess">Спасибо! Заявка отправлена. Скоро с вами свяжутся.</p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script>
+const particleField = document.querySelector('.particle-field');
+
+if (particleField) {
+  for (let index = 0; index < 8; index += 1) {
+    const particle = document.createElement('span');
+    particle.className = 'particle';
+    particle.style.left = `${6 + ((index * 13) % 88)}%`;
+    particle.style.top = `${12 + ((index * 17) % 76)}%`;
+    particle.style.setProperty('--duration', `${5 + (index % 5)}s`);
+    particle.style.setProperty('--delay', `${index * 0.16}s`);
+    particleField.appendChild(particle);
+  }
+}
+
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  },
+  { threshold: 0.15 }
+);
+
+document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
+
+const form = document.querySelector('#leadForm');
+const success = document.querySelector('#formSuccess');
+
+if (form && success) {
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    success.classList.add('show');
+    form.reset();
+  });
+}
+
+    </script>
+  </body>
+</html>
