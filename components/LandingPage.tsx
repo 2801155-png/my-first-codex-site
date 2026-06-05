@@ -159,7 +159,7 @@ export default function LandingPage() {
             <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 7, repeat: Infinity }} className="rounded-[2rem] border border-white/80 bg-white/75 p-4 shadow-card backdrop-blur-xl">
               <div className="overflow-hidden rounded-[1.55rem] bg-milk p-3">
                 <img
-                  src="/natalya.jpg"
+                  src="/natalya.jpeg"
                   alt="Наталья Руцкая"
                   className="h-[520px] w-full rounded-[1.25rem] object-cover object-center shadow-card"
                 />

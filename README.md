@@ -35,7 +35,7 @@ npm run dev
 
 ## Фото тренера
 
-В текущей разметке фото подключается как `natalya.jpg`:
+В текущей разметке фото подключается как `natalya.jpeg`:
 
-- для `preview.html` положите `natalya.jpg` рядом с файлом `preview.html`;
-- для Next.js-версии положите `natalya.jpg` в папку `public`.
+- для `preview.html` положите `natalya.jpeg` рядом с файлом `preview.html`;
+- для Next.js-версии положите `natalya.jpeg` в папку `public`.
